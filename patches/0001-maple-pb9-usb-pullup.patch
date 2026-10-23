@@ -1,0 +1,20 @@
+--- a/src/platforms/swlink/platform.c	2026-10-23 01:35:25.129855426 +0000
++++ b/src/platforms/swlink/platform.c	2026-10-23 01:35:25.133301432 +0000
+@@ -60,6 +60,17 @@
+ 	rcc_periph_clock_enable(RCC_AFIO);
+ 	rcc_periph_clock_enable(RCC_CRC);
+ 
++	/*
++	 * Maple Mini specific: the USB D+ 1.5k pull-up is EXTERNAL and gated by a
++	 * transistor on PB9 (USB_DISC). Driving PB9 low turns the pull-up ON so the
++	 * host detects the device; left high/floating the pull-up is off and the
++	 * board is invisible on the bus. Do this early so the pull-up is present as
++	 * soon as possible after reset.
++	 */
++	rcc_periph_clock_enable(RCC_GPIOB);
++	gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_50_MHZ, GPIO_CNF_OUTPUT_PUSHPULL, GPIO9);
++	gpio_clear(GPIOB, GPIO9);
++
+ 	/* Unmap JTAG Pins so we can reuse as GPIO */
+ 	data = AFIO_MAPR;
+ 	data &= ~AFIO_MAPR_SWJ_MASK;

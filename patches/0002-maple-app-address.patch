@@ -1,0 +1,22 @@
+--- a/src/platforms/swlink/meson.build	2026-10-23 01:35:25.129934180 +0000
++++ b/src/platforms/swlink/meson.build	2026-10-23 01:35:25.133407050 +0000
+@@ -50,7 +50,7 @@
+ ]
+ 
+ probe_swlink_link_args = [
+-	'-Wl,-Ttext=0x8002000',
++	'-Wl,-Ttext=0x08005000',
+ ]
+ 
+ trace_protocol = get_option('trace_protocol')
+--- a/src/platforms/swlink/usbdfu.c	2026-10-23 01:35:25.129970884 +0000
++++ b/src/platforms/swlink/usbdfu.c	2026-10-23 01:35:25.133488269 +0000
+@@ -27,7 +27,7 @@
+ #include "platform.h"
+ #include "platform_common.h"
+ 
+-uintptr_t app_address = 0x08002000U;
++uintptr_t app_address = 0x08005000U;
+ uint32_t rev;
+ 
+ void dfu_detach(void)
