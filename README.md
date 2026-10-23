@@ -156,11 +156,10 @@ lsusb | grep -i black      # Black Magic Probe (1d50:6018)
 ls /dev/ttyACM*            # ttyACM0 (debugger), ttyACM1 (console)
 ```
 
-If you get a permission error on the USB DFU or the `ttyACM*` devices:
-
-```sh
-sudo usermod -aG dialout "$USER"   # then log out and back in
-```
+If you get a permission error on the USB DFU or the `ttyACM*` devices, your
+user likely needs access to the USB devices: adding your user to the `dialout`
+group or updating your system's udev rules usually fixes it ( check your
+distribution's documentation for the right way to do that ).
 
 ## 4. Use the probe
 
@@ -171,14 +170,17 @@ power the target, then:
 ./use.sh                     # starts GDB attached to /dev/ttyACM0
 ```
 
-Inside GDB:
+Inside GDB ( the sequence below is what was verified working when flashing a
+target ):
 
 ```
-(gdb) monitor scan            # find the target on the SWD bus
-(gdb) monitor reset
+(gdb) target extended-remote /dev/ttyACM0
+(gdb) monitor swdp_scan       # find the target on the SWD bus
+(gdb) attach 1                # attach to the first target found
 (gdb) file my_target.elf      # load symbols
-(gdb) break main
-(gdb) continue
+(gdb) load                    # flash the program to the target
+(gdb) compare-sections        # verify what was written
+(gdb) kill                    # detach and close the target
 ```
 
 To raw-flash a binary to the target from GDB:
