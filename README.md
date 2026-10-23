@@ -183,13 +183,6 @@ target ):
 (gdb) kill                    # detach and close the target
 ```
 
-To raw-flash a binary to the target from GDB:
-
-```
-(gdb) flash write image.bin 0x08000000
-(gdb) monitor reset
-```
-
 You can also drive the probe with OpenOCD (`interface blackmagicpi`) or any tool
 that speaks the GDB Remote Serial Protocol on `/dev/ttyACM0`.
 
@@ -211,9 +204,6 @@ to `0x08005000` the same way.
 
 ## Troubleshooting
 
-- **`dfu-util` can't find `1eaf:0003`** — you're not in the LeafLabs bootloader.
-  Make sure you **held the BOOT button the whole time** while plugging in USB, and
-  that the cable carries data. Try a different USB port/cable.
 - **Board enumerates as `1eaf:0003` but not `1d50:6018` after flashing** — the app
   image didn't flash, or the app is too big. Re-run step 2 of `./flash.sh`.
 - **App too big / link error about `rom` overflow** — the app is larger than the
