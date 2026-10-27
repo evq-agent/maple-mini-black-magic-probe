@@ -20,8 +20,9 @@ The F103's flash is split into two regions:
 | `0x08005000` | 108 KB | Black Magic **probe app** (what we flash)           |
 
 The Maple Mini ships with the LeafLabs bootloader in the first 8 KB. It boots into
-USB-DFU mode (`1eaf:0003`) while the BOOT button is held, and otherwise jumps to
-the app at `0x08005000`. We flash the Black Magic app into that app region through
+USB-DFU mode (`1eaf:0003`) automatically, and stays in DFU mode only if the user
+button is held during the DFU timeout (while the on-board LED blinks fast); otherwise
+it jumps to the app at `0x08005000`. We flash the Black Magic app into that app region through
 the LeafLabs bootloader — no external debugger, no BOOT0 jumper.
 
 > The Maple Mini is an **STM32F103CBT6** with **128 KB** of flash, leaving 108 KB
